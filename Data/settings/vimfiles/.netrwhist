@@ -1,0 +1,10 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhistcnt =8
+let g:netrw_dirhist_8='D:/gVimPortable'
+let g:netrw_dirhist_7='D:/gVimPortable/Data/settings'
+let g:netrw_dirhist_6='D:/gVimPortable'
+let g:netrw_dirhist_5='D:/gVimPortable/Data/settings'
+let g:netrw_dirhist_4='D:/gVimPortable'
+let g:netrw_dirhist_3='D:/gVimPortable/Data/settings'
+let g:netrw_dirhist_2='D:/gVimPortable/Data'
+let g:netrw_dirhist_1='D:/gVimPortable'

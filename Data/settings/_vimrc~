@@ -1,0 +1,116 @@
+set nocompatible
+source $VIMRUNTIME/vimrc_example.vim
+source $VIMRUNTIME/mswin.vim
+behave mswin
+
+set diffexpr=MyDiff()
+function MyDiff()
+    let opt = '-a --binary '
+    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+    let arg1 = v:fname_in
+    if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+    let arg2 = v:fname_new
+    if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+    let arg3 = v:fname_out
+    if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+    let eq = ''
+    if $VIMRUNTIME =~ ' '
+        if &sh =~ '\<cmd'
+            let cmd = '""' . $VIMRUNTIME . '\diff"'
+            let eq = '"'
+        else
+            let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+        endif
+    else
+        let cmd = $VIMRUNTIME . '\diff'
+    endif
+    silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+endfunction
+
+
+set encoding=utf-8
+set rnu
+"set clipboard=unnamedplus
+
+" font and colorschema
+set guifont=JetBrains\ Mono:h12
+if has('windows')
+    "get dpi, strip out utf-16 garbage and new lines
+    "system() converts 0x00 to 0x01 for 'platform independence'
+    "should return something like 'PixelsPerXLogicalInch=192'
+    "get the part from the = to the end of the line (eg '=192') and strip
+    "the first character
+    "and convert to a number
+    let dpi = str2nr(strpart(matchstr(substitute(
+                \system('wmic desktopmonitor get PixelsPerXLogicalInch /value'),
+                \'\%x01\|\%x0a\|\%x0a\|\%xff\|\%xfe', '', 'g'),
+                \'=.*$'), 1))
+    if dpi > 100
+        set guifont=high_dpi_font
+    endif
+endif
+
+" remap keys
+imap jk <ESC>
+"split navigations
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+
+" Vundle - Package manager
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=$HOME/.vim/bundle/Vundle.vim/
+set rtp+=$HOME/.vim/bundle/nerdtree/
+set rtp+=$HOME/.vim/bundle/vim-sneak/
+set rtp+=$HOME/.vim/bundle/SimpylFold/
+set rtp+=$HOME/.vim/bundle/vim-flake8/
+set rtp+=$HOME/.vim/bundle/syntastic/
+set rtp+=$HOME/.vim/bundle/indentpython.vim/
+set rtp+=$HOME/.vim/bundle/onedark.vim/
+set rtp+=$HOME/.vim/bundle/vim-surround/
+"set rtp+=$HOME/.vim/bundle/YouCompleteMe/
+
+call vundle#begin('$HOME/.vim/bundle')
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+"Plugin 'endel/vim-github-colorscheme'
+"Plugin 'tmhedberg/SimpylFold'
+"Plugin 'vim-scripts/indentpython.vim'
+"Plugin 'Valloric/YouCompleteMe'
+"Plugin 'vim-syntastic/syntastic'
+"Plugin 'nvie/vim-flake8'
+"Plugin 'preservvim/nerdtree'
+
+
+call vundle#end()            " required
+filetype plugin indent on    " required
+
+" Enable folding
+set foldmethod=indent
+set foldlevel=99
+
+" Plugin Config
+" color scheme
+colorscheme onedark
+" AutoComplete
+"let g:ycm_autoclose_preview_window_after_completion=1
+"map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+" nerdTree
+let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
+
+" Python specific settings
+au BufNewFile,BufRead *.py set tabstop=4
+au BufNewFile,BufRead *.py set softtabstop=4
+au BufNewFile,BufRead *.py set shiftwidth=4
+au BufNewFile,BufRead *.py set textwidth=79
+au BufNewFile,BufRead *.py set expandtab
+au BufNewFile,BufRead *.py set autoindent
+au BufNewFile,BufRead *.py set fileformat=unix
+
+let python_highlight_all=1
+syntax on
