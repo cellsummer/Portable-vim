@@ -1,6 +1,9 @@
-C:\Users\cells\Documents\Github\AAPS\core\econ\yield_curve.py
 D:\gVimPortable\Data\settings\_vimrc
+C:\Users\cells\Documents\Github\AAPS\core\econ\yield_curve.py
+C:\Users\cells\AppData\Local\nvim\lua\keymappings.lua
 D:\gVimPortable\Data\settings\gVimPortableSettings.ini
+D:\gVimPortable\App\readme.txt
+D:\gVimPortable\Data\settings\_viminfo
 D:\gVimPortable\help.html
 D:\gVimPortable\Data\Temp\VIA4173.tmp
 D:\gVimPortable\App\vim\vim80\doc\intro.txt

@@ -5,32 +5,36 @@ set nocompatible
 
 set diffexpr=MyDiff()
 function MyDiff()
-    let opt = '-a --binary '
-    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-    let arg1 = v:fname_in
-    if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-    let arg2 = v:fname_new
-    if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-    let arg3 = v:fname_out
-    if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-    let eq = ''
-    if $VIMRUNTIME =~ ' '
+	let opt = '-a --binary '
+	if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+	if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+	let arg1 = v:fname_in
+	if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+	let arg2 = v:fname_new
+	if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+	let arg3 = v:fname_out
+	if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+	let eq = ''
+	if $VIMRUNTIME =~ ' '
         if &sh =~ '\<cmd'
             let cmd = '""' . $VIMRUNTIME . '\diff"'
-            let eq = '"'
-        else
-            let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+	        let eq = '"'
+	    else
+	        let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
         endif
     else
         let cmd = $VIMRUNTIME . '\diff'
-    endif
-    silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+	endif
+	silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunction
 
 
 set encoding=utf-8
 set rnu
+set ts=4
+set sw=4
+set expandtab
+"set shell=C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe
 "set clipboard=unnamedplus
 set iskeyword+=-
 let mapleader = " "
@@ -50,12 +54,32 @@ if has('windows')
                 \'=.*$'), 1))
     if dpi > 100
         set guifont=high_dpi_font
+
     endif
 endif
 
 " remap keys
 imap jk <ESC>
+
+" copy to the end
+nnoremap Y yg_
+
+" undo partially
+imap , ,<C-g>u
+imap . .<C-g>u
+imap ! !<C-g>u
+imap ? ?<C-g>u
+
+"Moving text
+vmap <A-k> :m '<-2<CR>gv=gv
+vmap <A-j> :m '>+1<cr>gv=gv
+imap <A-k> <ESC>:m .-2<CR>==i
+imap <A-j> <ESC>:m .+1<CR>==i
+nmap <A-j> :m .+1<CR>==
+nmap <A-k> :m .-2<CR>==
+
 "split navigations
+nnoremap <Leader>v :vsplit<CR>
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
@@ -80,21 +104,21 @@ set rtp+=$HOME/.vim/bundle/vim-surround/
 set rtp+=$HOME/.vim/bundle/ctrlp.vim/
 set rtp+=$HOME/.vim/bundle/auto-pairs/
 set rtp+=$HOME/.vim/bundle/ale/
+set rtp+=$HOME/.vim/bundle/vim-airline/
+set rtp+=$HOME/.vim/bundle/vim-airline-themes/
+
 
 call vundle#begin('$HOME/.vim/bundle')
 
-" let Vundle manage Vundle, required
-Plugin 'gmarik/Vundle.vim'
-"Plugin 'endel/vim-github-colorscheme'
-"Plugin 'tmhedberg/SimpylFold'
-"Plugin 'vim-scripts/indentpython.vim'
-"Plugin 'Valloric/YouCompleteMe'
-"Plugin 'vim-syntastic/syntastic'
-
-"Plugin 'nvie/vim-flake8'
-"Plugin 'preservvim/nerdtree'
-
-
+    " let Vundle manage Vundle, required
+    Plugin 'gmarik/Vundle.vim'
+    "Plugin 'endel/vim-github-colorscheme'
+    "Plugin 'tmhedberg/SimpylFold'
+    "Plugin 'vim-scripts/indentpython.vim'
+    "Plugin 'Valloric/YouCompleteMe'
+    "Plugin 'vim-syntastic/syntastic'
+    "Plugin 'nvie/vim-flake8'
+    "Plugin 'preservvim/nerdtree'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
@@ -108,7 +132,15 @@ colorscheme onedark
 " AutoComplete
 "let g:ycm_autoclose_preview_window_after_completion=1
 "map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
-
+" Airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '|'
+nnoremap <Leader>b :ls<CR>:b<Space>
+nnoremap <Leader>c :bd<CR>
+" move among buffers with CTRL
+map <S-K> :bnext<CR>
+map <S-J> :bprev<CR>
 " nerdTree
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 nnoremap <leader>e :NERDTreeToggle<CR>
